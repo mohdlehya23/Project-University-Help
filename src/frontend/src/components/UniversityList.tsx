@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUniversities } from '../services/api';
-import { University } from '../types';
+import type { University } from '../types';
 
 const UniversityList = () => {
     const [universities, setUniversities] = useState<University[]>([]);

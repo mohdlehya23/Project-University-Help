@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getMajors } from '../services/api';
-import { Major } from '../types';
+import type { Major } from '../types';
 
 const MajorList = () => {
     const [majors, setMajors] = useState<Major[]>([]);
