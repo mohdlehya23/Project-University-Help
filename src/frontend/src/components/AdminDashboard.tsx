@@ -594,6 +594,22 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                                             className={inputClass}
                                         />
                                     </div>
+                                    
+                                    <div>
+                                        <label className={labelClass}>المجال الأكاديمي</label>
+                                        <select
+                                            value={academicField}
+                                            onChange={(e) => setAcademicField(e.target.value)}
+                                            className={inputClass}
+                                        >
+                                            <option value="engineering">هندسة</option>
+                                            <option value="medical">علوم طبية</option>
+                                            <option value="it">تكنولوجيا المعلومات</option>
+                                            <option value="business">أعمال واقتصاد</option>
+                                            <option value="arts">آداب وعلوم إنسانية</option>
+                                            <option value="science">علوم</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
