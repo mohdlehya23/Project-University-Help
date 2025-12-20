@@ -115,6 +115,10 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     const [selectedCollegeKey, setSelectedCollegeKey] = useState('');
     const [description, setDescription] = useState('');
     const [planUrl, setPlanUrl] = useState('');
+    // Admission info fields
+    const [minGpa, setMinGpa] = useState('');
+    const [tuitionFees, setTuitionFees] = useState('');
+    const [studyYears, setStudyYears] = useState('');
 
     // Fetch colleges when university is selected for majors
     useEffect(() => {
@@ -134,12 +138,20 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 collegeKey: selectedCollegeKey,
                 description,
                 plan_url: planUrl,
+                admission_requirements: minGpa ? { min_gpa: parseFloat(minGpa) } : undefined,
+                study_info: {
+                    duration_years: studyYears ? parseInt(studyYears) : undefined,
+                    tuition_fees: tuitionFees || undefined
+                }
             });
             setMessage('✅ تم إضافة التخصص بنجاح!');
             setMajorName('');
             setDescription('');
             setPlanUrl('');
             setSelectedCollegeKey('');
+            setMinGpa('');
+            setTuitionFees('');
+            setStudyYears('');
         } catch (error: any) {
             setMessage(`❌ خطأ في إضافة التخصص: ${error.response?.data?.message || 'خطأ غير معروف'}`);
         }
@@ -529,6 +541,52 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                                     className={inputClass}
                                 />
                             </div>
+
+                            {/* Admission Info Section */}
+                            <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mt-4">
+                                <h4 className="font-bold text-lg mb-3 text-gray-800 dark:text-gray-100">📊 معلومات القبول والدراسة</h4>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label className={labelClass}>المعدل المطلوب (GPA)</label>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            max="4"
+                                            value={minGpa}
+                                            onChange={(e) => setMinGpa(e.target.value)}
+                                            placeholder="مثال: 3.0"
+                                            className={inputClass}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className={labelClass}>الرسوم الدراسية</label>
+                                        <input
+                                            type="text"
+                                            value={tuitionFees}
+                                            onChange={(e) => setTuitionFees(e.target.value)}
+                                            placeholder="مثال: رسوم رمزية"
+                                            className={inputClass}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className={labelClass}>مدة الدراسة (سنوات)</label>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="10"
+                                            value={studyYears}
+                                            onChange={(e) => setStudyYears(e.target.value)}
+                                            placeholder="مثال: 4"
+                                            className={inputClass}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             <button
                                 type="submit"
                                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
