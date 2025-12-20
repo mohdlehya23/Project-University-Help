@@ -18,6 +18,7 @@ export interface StudyInfo {
     language?: string;
     credit_hours?: number;
     credit_hour_price?: number;
+    tuition_fees?: number;
 }
 
 export interface AdmissionRequirements {
