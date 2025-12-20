@@ -554,26 +554,26 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <label className={labelClass}>المعدل المطلوب (GPA)</label>
+                                        <label className={labelClass}>المعدل المطلوب (%)</label>
                                         <input
                                             type="number"
-                                            step="0.01"
+                                            step="0.1"
                                             min="0"
-                                            max="4"
+                                            max="100"
                                             value={minGpa}
                                             onChange={(e) => setMinGpa(e.target.value)}
-                                            placeholder="مثال: 3.0"
+                                            placeholder="مثال: 85"
                                             className={inputClass}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className={labelClass}>الرسوم الدراسية</label>
+                                        <label className={labelClass}>الرسوم (دينار/ساعة)</label>
                                         <input
                                             type="text"
                                             value={tuitionFees}
                                             onChange={(e) => setTuitionFees(e.target.value)}
-                                            placeholder="مثال: رسوم رمزية"
+                                            placeholder="مثال: 50"
                                             className={inputClass}
                                         />
                                     </div>

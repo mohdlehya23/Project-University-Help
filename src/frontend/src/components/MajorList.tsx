@@ -55,7 +55,7 @@ const MajorList = () => {
                             {major.admission_requirements?.min_gpa && (
                                 <div className="flex items-center gap-2 text-sm">
                                     <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded font-semibold">
-                                        📊 المعدل: {major.admission_requirements.min_gpa}
+                                        📊 المعدل: {major.admission_requirements.min_gpa}%
                                     </span>
                                 </div>
                             )}
@@ -68,7 +68,7 @@ const MajorList = () => {
                                 )}
                                 {major.study_info?.tuition_fees && (
                                     <span className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-2 py-1 rounded">
-                                        💰 {major.study_info.tuition_fees}
+                                        💰 {major.study_info.tuition_fees} دينار/ساعة
                                     </span>
                                 )}
                             </div>
