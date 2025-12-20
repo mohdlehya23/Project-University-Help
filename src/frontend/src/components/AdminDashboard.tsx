@@ -148,10 +148,16 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
             setMajorName('');
             setDescription('');
             setPlanUrl('');
-            setSelectedCollegeKey('');
+            // Optional: Don't clear college selection so user can add more majors
+            // setSelectedCollegeKey(''); 
             setMinGpa('');
             setTuitionFees('');
             setStudyYears('');
+            
+            // Refresh list
+            if (selectedMajorUniKey && selectedCollegeKey) {
+                fetchMajors(selectedMajorUniKey, selectedCollegeKey);
+            }
         } catch (error: any) {
             setMessage(`❌ خطأ في إضافة التخصص: ${error.response?.data?.message || 'خطأ غير معروف'}`);
         }
