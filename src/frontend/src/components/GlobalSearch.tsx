@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useBookmarks } from '../contexts/BookmarksContext';
@@ -47,7 +47,37 @@ const GlobalSearch = () => {
         }
     };
 
-    const totalResults = results.universities.length + results.colleges.length + results.majors.length;
+    // Client-side filtering based on university type and academic field
+    const filteredResults = useMemo(() => {
+        let filtered = { ...results };
+
+        // Filter universities by type
+        if (universityType !== 'all') {
+            filtered.universities = results.universities.filter(
+                (uni: any) => uni.type === universityType
+            );
+        }
+
+        // Filter majors by academic field and university type
+        if (academicField !== 'all' || universityType !== 'all') {
+            filtered.majors = results.majors.filter((major: any) => {
+                const fieldMatch = academicField === 'all' || major.academic_field === academicField;
+                const typeMatch = universityType === 'all' || major.university?.type === universityType;
+                return fieldMatch && typeMatch;
+            });
+        }
+
+        // Filter colleges by university type
+        if (universityType !== 'all') {
+            filtered.colleges = results.colleges.filter(
+                (college: any) => college.university?.type === universityType
+            );
+        }
+
+        return filtered;
+    }, [results, universityType, academicField]);
+
+    const totalResults = filteredResults.universities.length + filteredResults.colleges.length + filteredResults.majors.length;
 
     return (
         <div className="container mx-auto p-4">
@@ -132,11 +162,11 @@ const GlobalSearch = () => {
             {/* Results */}
             <div className="max-w-4xl mx-auto space-y-6">
                 {/* Universities */}
-                {results.universities.length > 0 && (
+                {filteredResults.universities.length > 0 && (
                     <div>
-                        <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">🎓 الجامعات ({results.universities.length})</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">🎓 الجامعات ({filteredResults.universities.length})</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {results.universities.map((uni) => (
+                            {filteredResults.universities.map((uni) => (
                                 <div
                                     key={uni._id}
                                     onClick={() => navigate(`/universities/${uni.key}`)}
@@ -152,11 +182,11 @@ const GlobalSearch = () => {
                 )}
 
                 {/* Colleges */}
-                {results.colleges.length > 0 && (
+                {filteredResults.colleges.length > 0 && (
                     <div>
-                        <h2 className="text-2xl font-bold mb-4 text-green-600 dark:text-green-400">🏛️ الكليات ({results.colleges.length})</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-green-600 dark:text-green-400">🏛️ الكليات ({filteredResults.colleges.length})</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {results.colleges.map((college) => (
+                            {filteredResults.colleges.map((college) => (
                                 <div
                                     key={college._id}
                                     onClick={() => navigate(`/universities/${college.universityKey}/colleges/${college.key}`)}
@@ -175,11 +205,11 @@ const GlobalSearch = () => {
                 )}
 
                 {/* Majors */}
-                {results.majors.length > 0 && (
+                {filteredResults.majors.length > 0 && (
                     <div>
-                        <h2 className="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">📚 التخصصات ({results.majors.length})</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">📚 التخصصات ({filteredResults.majors.length})</h2>
                         <div className="grid grid-cols-1 gap-4">
-                            {results.majors.map((major) => (
+                            {filteredResults.majors.map((major) => (
                                 <div
                                     key={major._id}
                                     className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition relative group"
