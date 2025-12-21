@@ -1,169 +1,289 @@
-# Gaza Uni Portal
+# 🎓 Gaza Universities Majors System
 
-A professional full-stack web application for exploring higher education options in Gaza universities. Built with modern technologies following best practices for containerization and deployment.
+A comprehensive web application for exploring university majors in Gaza, featuring an admin panel for data management and advanced search capabilities.
 
-## 🎯 Project Description
+## ✨ Features
 
-Gaza Uni Portal helps students discover and explore universities, colleges, and academic majors across Gaza. The application provides detailed information about study plans, admission requirements, tuition fees, and degree details.
+### User Features
+- **📚 Browse Universities & Majors**: Explore universities, colleges, and academic programs
+- **🔍 Advanced Search**: 
+  - Search by university, college, or major name
+  - Filter by university type (Public/Private)
+  - Filter by academic field (Engineering, Medical, IT, Business, Arts, Science)
+- **⭐ Bookmarks System**: Save favorite majors for quick access (stored in browser)
+- **🌓 Dark Mode**: Toggle between light and dark themes
+- **📱 Responsive Design**: Works seamlessly on desktop and mobile devices
+
+### Admin Features
+- **🔐 Secure Admin Panel**: Protected login system
+- **➕ Add/Edit/Delete**: Manage universities, colleges, and majors
+- **📊 Admission Requirements**: Set min GPA, tuition fees, study duration
+- **🏛️ University Classification**: Mark universities as Public or Private
+- **🎯 Academic Field Tagging**: Categorize majors by academic field
+- **💾 Persistent Sessions**: Admin stays logged in across page refreshes
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** with **TypeScript**
-- **Vite** - Fast build tool
-- **Tailwind CSS** - Utility-first CSS framework
-- **React Router** - Client-side routing
-- **Axios** - HTTP client for API calls
+- **React 18** with TypeScript
+- **Vite** for fast development
+- **React Router** for navigation
+- **Axios** for API calls
+- **Tailwind CSS v4** for styling
+- **Context API** for state management (Theme, Bookmar
+ks)
 
 ### Backend
-- **Node.js** with **Express**
-- **TypeScript** - Type-safe JavaScript
-- **MongoDB** with **Mongoose** - NoSQL database
-- **CORS** - Cross-origin resource sharing
-
-### DevOps
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
-- **Nginx** - Reverse proxy for frontend
-- **Multi-stage builds** - Optimized production images
+- **Node.js** with Express
+- **TypeScript** for type safety
+- **MongoDB** with Mongoose ODM
+- **RESTful API** architecture
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Docker
-- Docker Compose
+- Node.js 18+ 
+- MongoDB (local or Atlas)
 - Git
 
-### Running with Docker Compose
+### Installation
 
 1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd "Project University Help"
-   ```
-
-2. **Start all services**
-   ```bash
-   docker-compose up --build
-   ```
-
-3. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:5000
-   - MongoDB: localhost:27017
-
-### Running Locally (Development)
-
-#### Backend
 ```bash
+git clone <repository-url>
+cd "Project University Help"
+```
+
+2. **Install dependencies**
+```bash
+# Install backend dependencies
 cd src/backend
 npm install
-cp .env.example .env
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+3. **Environment Setup**
+
+Create `.env` file in `src/backend/`:
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+```
+
+Create `.env` file in `src/frontend/`:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+4. **Run the application**
+
+**Option 1: Development Mode**
+```bash
+# Terminal 1 - Backend
+cd src/backend
+npm run dev
+
+# Terminal 2 - Frontend
+cd src/frontend
 npm run dev
 ```
 
-#### Frontend
+**Option 2: Using Docker** (Recommended for production)
 ```bash
-cd src/frontend
-npm install
-cp .env.example .env
-npm run dev
+docker-compose up -d
 ```
+
+Access the application:
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:5000/api
+- **Admin Panel**: http://localhost:5173/admin-panel
+
+## 📖 API Endpoints
+
+### Universities
+- `GET /api/universities` - Get all universities
+- `POST /api/universities` - Create university (Admin)
+- `PUT /api/universities/:id` - Update university (Admin)
+- `DELETE /api/universities/:id` - Delete university (Admin)
+
+### Colleges
+- `GET /api/universities/:uniKey/colleges` - Get colleges by university
+- `POST /api/colleges` - Create college (Admin)
+- `PUT /api/colleges/:id` - Update college (Admin)
+- `DELETE /api/colleges/:id` - Delete college (Admin)
+
+### Majors
+- `GET /api/universities/:uniKey/colleges/:collegeKey/majors` - Get majors
+- `POST /api/majors` - Create major (Admin)
+- `PUT /api/majors/:id` - Update major (Admin)
+- `DELETE /api/majors/:id` - Delete major (Admin)
+
+### Search
+- `GET /api/search?query=<term>&type=<all|university|college|major>` - Global search
+
+### Admin
+- `POST /api/admin/login` - Admin login
+
+## 🗂️ Data Models
+
+### University
+```typescript
+{
+  key: string;           // Unique identifier (e.g., "iu")
+  name: string;          // University name
+  color: string;         // Brand color (hex)
+  type: 'public' | 'private';  // University type
+}
+```
+
+### College
+```typescript
+{
+  key: string;           // Unique identifier
+  name: string;          // College name
+  universityKey: string; // Reference to university
+}
+```
+
+### Major
+```typescript
+{
+  name: string;
+  universityKey: string;
+  collegeKey: string;
+  description?: string;
+  plan_url?: string;
+  academic_field?: string;  // engineering, medical, it, business, arts, science
+  study_info?: {
+    duration_years?: number;
+    tuition_fees?: number;
+  };
+  admission_requirements?: {
+    min_gpa?: number;  // 0-100 scale
+  };
+}
+```
+
+## 🔒 Admin Panel
+
+**Default Credentials** (Change in production!):
+- Username: `admin`
+- Password: `admin123`
+
+### Admin Features
+1. **Universities**: Add, edit, delete universities with type classification
+2. **Colleges**: Manage colleges under each university
+3. **Majors**: Full CRUD operations with:
+   - Admission requirements (Min GPA %)
+   - Study info (Duration, Fees per credit hour)
+   - Academic field categorization
+   - Study plan URL
+
+## 🐳 Docker Deployment
+
+The project includes Docker configuration for easy deployment:
+
+```bash
+# Build and start services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+Services:
+- **frontend**: React app (port 5173)
+- **backend**: Express API (port 5000)
+- **mongodb**: MongoDB database (port 27017)
 
 ## 📁 Project Structure
 
 ```
-.
+Project University Help/
 ├── src/
-│   ├── backend/           # Node.js backend
+│   ├── backend/          # Express API
 │   │   ├── src/
-│   │   │   ├── config/    # Database configuration
-│   │   │   ├── models/    # Mongoose models
-│   │   │   ├── controllers/ # Route controllers
-│   │   │   ├── routes/    # API routes
-│   │   │   └── server.ts  # Express server
-│   │   ├── package.json
-│   │   └── tsconfig.json
-│   └── frontend/          # React frontend
+│   │   │   ├── models/   # Mongoose models
+│   │   │   ├── routes/   # API routes
+│   │   │   └── controllers/
+│   │   └── package.json
+│   └── frontend/         # React app
 │       ├── src/
-│       │   ├── components/ # React components
-│       │   ├── services/   # API service layer
-│       │   ├── types/      # TypeScript types
-│       │   ├── App.tsx
-│       │   └── main.tsx
-│       ├── package.json
-│       └── vite.config.ts
-├── docs/                  # Documentation
-│   ├── notes.md          # Technical notes
-│   └── screenshots/      # Application screenshots
-├── legacy_backup/        # Original project files
-├── Dockerfile            # Multi-stage Docker build
-├── docker-compose.yml    # Service orchestration
-├── nginx.conf           # Nginx configuration
-└── README.md            # This file
+│       │   ├── components/
+│       │   ├── contexts/
+│       │   ├── services/
+│       │   └── types/
+│       └── package.json
+├── docker-compose.yml
+├── Dockerfile
+└── README.md
 ```
 
-## 🔧 API Endpoints
+## 🎨 Features in Detail
 
-### Universities
-- `GET /api/universities` - List all universities
-- `POST /api/universities` - Create a university
+### Bookmarks System
+- Bookmark favorite majors with a single click
+- Persist bookmarks in browser localStorage
+- View all bookmarked majors in dedicated page
+- Real-time bookmark counter in navbar
 
-### Colleges
-- `GET /api/universities/:uniKey/colleges` - List colleges by university
-- `POST /api/colleges` - Create a college
+### Advanced Search
+- Debounced search (300ms delay)
+- Filter by entity type (universities/colleges/majors)
+- Filter by university type (public/private)
+- Filter by academic field
+- Highlighted search results
 
-### Majors
-- `GET /api/universities/:uniKey/colleges/:collegeKey/majors` - List majors
-- `POST /api/majors` - Create a major
-- `GET /api/universities/:uniKey/colleges/:collegeKey/majors/:majorId` - Get major details
-
-## 🐳 Docker Architecture
-
-The application uses a multi-stage Docker build process:
-
-1. **Backend Builder** - Installs and prepares Node.js backend
-2. **Frontend Builder** - Builds optimized React production bundle
-3. **Backend Production** - Lightweight Node.js runtime
-4. **Frontend Production** - Nginx serving static files
-
-### Healthcheck
-The backend service includes a healthcheck endpoint that Docker monitors:
-- Endpoint: `GET /api/universities`
-- Interval: 30s
-- Timeout: 10s
-- Retries: 3
-
-## 📝 Environment Variables
-
-### Backend (.env)
-```
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/gaza_uni_portal
-```
-
-### Frontend (.env)
-```
-VITE_API_URL=http://localhost:5000/api
-```
+### Dark Mode
+- System-wide theme toggle
+- Persists user preference
+- Smooth transitions between themes
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'feat: add some AmazingFeature'`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## 📝 Commit Convention
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+- `feat:` New features
+- `fix:` Bug fixes
+- `docs:` Documentation changes
+- `style:` Code style changes
+- `refactor:` Code refactoring
+- `test:` Test additions/changes
+- `chore:` Build/config changes
+
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
-## 👥 Authors
+## 👨‍💻 Author
 
-Gaza Uni Portal Team
+Developed with ❤️ for Gaza Universities
 
-## 🙏 Acknowledgments
+## 🐛 Known Issues
 
-- Built as part of university coursework on Docker and Git workflows
-- Inspired by the need to help students in Gaza access higher education information
+None at the moment! Report issues on GitHub.
+
+## 🔜 Roadmap
+
+- [ ] User authentication system
+- [ ] University comparisons
+- [ ] Career path suggestions
+- [ ] Student reviews and ratings
+- [ ] Mobile app (React Native)
+
+---
+
+**Made with 🎓 for students in Gaza**
