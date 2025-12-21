@@ -331,6 +331,17 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                                     className="w-full h-12 p-1 border border-gray-300 dark:border-gray-600 rounded-lg"
                                 />
                             </div>
+                            <div>
+                                <label className={labelClass}>نوع الجامعة</label>
+                                <select
+                                    value={uniType}
+                                    onChange={(e) => setUniType(e.target.value as 'public' | 'private')}
+                                    className={inputClass}
+                                >
+                                    <option value="public">حكومية</option>
+                                    <option value="private">خاصة</option>
+                                </select>
+                            </div>
                             <button
                                 type="submit"
                                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg"
