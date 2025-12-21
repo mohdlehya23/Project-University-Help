@@ -48,31 +48,45 @@ const GlobalSearch = () => {
     };
 
     // Client-side filtering based on university type and academic field
+    // Following strict filtering rules:
+    // 1. "All" = Bypass filter (no restriction)
+    // 2. Specific value = Strict match required
+    // 3. Multiple filters = AND logic
     const filteredResults = useMemo(() => {
-        let filtered = { ...results };
+        let filtered = {
+            universities: [...results.universities],
+            colleges: [...results.colleges],
+            majors: [...results.majors]
+        };
 
-        // Filter universities by type
+        // Rule 1: Filter Universities by Type
+        // "All" bypasses this filter, specific type requires strict match
         if (universityType !== 'all') {
-            filtered.universities = results.universities.filter(
+            filtered.universities = filtered.universities.filter(
                 (uni: any) => uni.type === universityType
             );
         }
 
-        // Filter majors by academic field and university type
-        if (academicField !== 'all' || universityType !== 'all') {
-            filtered.majors = results.majors.filter((major: any) => {
-                const fieldMatch = academicField === 'all' || major.academic_field === academicField;
-                const typeMatch = universityType === 'all' || major.university?.type === universityType;
-                return fieldMatch && typeMatch;
-            });
-        }
-
-        // Filter colleges by university type
+        // Rule 2: Filter Colleges by University Type
+        // Only if university type filter is active (not "all")
         if (universityType !== 'all') {
-            filtered.colleges = results.colleges.filter(
+            filtered.colleges = filtered.colleges.filter(
                 (college: any) => college.university?.type === universityType
             );
         }
+
+        // Rule 3: Filter Majors with AND Logic
+        // Apply both academic field AND university type filters
+        filtered.majors = filtered.majors.filter((major: any) => {
+            // Academic Field Filter: "all" bypasses, specific value requires match
+            const fieldMatch = academicField === 'all' || major.academic_field === academicField;
+            
+            // University Type Filter: "all" bypasses, specific value requires match
+            const typeMatch = universityType === 'all' || major.university?.type === universityType;
+            
+            // AND Logic: Both conditions must be true
+            return fieldMatch && typeMatch;
+        });
 
         return filtered;
     }, [results, universityType, academicField]);
