@@ -61,7 +61,7 @@ const UniversityList = () => {
                         className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer border-r-4 p-6"
                         style={{ borderTopColor: uni.color }}
                     >
-                        <h2 className="text-xl font-bold text-gray-800">{uni.name}</h2>
+                        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{uni.name}</h2>
                     </div>
                 ))}
             </div>

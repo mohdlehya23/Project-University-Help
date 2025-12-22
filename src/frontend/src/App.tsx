@@ -59,7 +59,6 @@ function App() {
     <ThemeProvider>
       <BookmarksProvider>
         <Router>
-            {/* ... rest of the app ... */}
           <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200" dir="rtl">
             <header className="bg-gray-800 dark:bg-gray-950 text-white p-4 shadow-lg sticky top-0 z-50">
               <div className="container mx-auto flex justify-between items-center">
@@ -101,7 +100,8 @@ function App() {
             />
           </Routes>
         </div>
-      </Router>
+        </Router>
+      </BookmarksProvider>
     </ThemeProvider>
   );
 }

@@ -19,3 +19,33 @@ export const createCollege = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+export const updateCollege = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const updatedCollege = await College.findByIdAndUpdate(
+            id,
+            req.body,
+            { new: true, runValidators: true }
+        );
+        if (!updatedCollege) {
+            return res.status(404).json({ message: 'College not found' });
+        }
+        res.json(updatedCollege);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+export const deleteCollege = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const deletedCollege = await College.findByIdAndDelete(id);
+        if (!deletedCollege) {
+            return res.status(404).json({ message: 'College not found' });
+        }
+        res.json({ message: 'College deleted successfully', college: deletedCollege });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};

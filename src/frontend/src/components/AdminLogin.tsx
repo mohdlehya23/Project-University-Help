@@ -1,25 +1,45 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 interface AdminLoginProps {
     onLogin: () => void;
 }
 
 const AdminLogin = ({ onLogin }: AdminLoginProps) => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
 
-        // Hardcoded credentials
-        if (email === 'admin23@gmail.com' && password === 'admin123') {
-            onLogin();
-            navigate('/admin-panel');
-        } else {
-            setError('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        try {
+            const response = await axios.post(`${API_URL}/admin/login`, {
+                username,
+                password
+            });
+
+            if (response.data.admin) {
+                // Store admin info in localStorage
+                localStorage.setItem('adminData', JSON.stringify(response.data.admin));
+                onLogin();
+                navigate('/admin-panel');
+            }
+        } catch (err: any) {
+            if (err.response?.data?.message) {
+                setError(`❌ ${err.response.data.message}`);
+            } else {
+                setError('❌ حدث خطأ في الاتصال بالخادم');
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -30,14 +50,15 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">البريد الإلكتروني</label>
+                        <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">اسم المستخدم</label>
                         <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             required
                             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                            placeholder="admin23@gmail.com"
+                            placeholder="admin"
+                            disabled={loading}
                         />
                     </div>
 
@@ -50,6 +71,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
                             required
                             className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             placeholder="••••••••"
+                            disabled={loading}
                         />
                     </div>
 
@@ -61,9 +83,10 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
 
                     <button
                         type="submit"
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition"
+                        disabled={loading}
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        دخول
+                        {loading ? '⏳ جاري التحقق...' : 'دخول'}
                     </button>
                 </form>
 

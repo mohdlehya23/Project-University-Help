@@ -68,8 +68,13 @@ const GlobalSearch = () => {
         }
 
         // Rule 2: Filter Colleges by University Type
-        // Only if university type filter is active (not "all")
-        if (universityType !== 'all') {
+        // IMPORTANT: Hide colleges when academic field filter is active
+        // (Colleges don't have academic_field, only majors do)
+        if (academicField !== 'all') {
+            // When a specific academic field is selected, hide all colleges
+            filtered.colleges = [];
+        } else if (universityType !== 'all') {
+            // Only filter by university type if no academic field selected
             filtered.colleges = filtered.colleges.filter(
                 (college: any) => college.university?.type === universityType
             );

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Major } from '../types';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import type { Major } from '../types';
 
 interface BookmarksContextType {
     bookmarks: Major[];

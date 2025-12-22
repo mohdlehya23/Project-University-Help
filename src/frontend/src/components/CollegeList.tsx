@@ -38,15 +38,15 @@ const CollegeList = () => {
             >
                 ⬅ رجوع للجامعات
             </button>
-            <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">الكليات</h1>
+            <h1 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">الكليات</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {colleges.map((college) => (
                     <div
                         key={college._id}
                         onClick={() => navigate(`/universities/${uniKey}/colleges/${college.key}`)}
-                        className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer border-l-4 border-green-500 hover:scale-105"
                     >
-                        <h2 className="text-xl font-bold text-gray-800">{college.name}</h2>
+                        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{college.name}</h2>
                     </div>
                 ))}
             </div>
