@@ -2,14 +2,12 @@
 FROM node:20-alpine AS backend-builder
 WORKDIR /app/backend
 
-# تحسين سرعة البناء باستخدام Layer Caching
-# نسخ ملفات الإعداد أولاً لتجنب إعادة تحميل المكتبات عند تغيير الكود فقط
+
 COPY src/backend/package*.json ./
 RUN npm install
 
-# نسخ بقية ملفات الباك إند
+
 COPY src/backend ./
-# ملاحظة: تأكد أن سطر البناء في package.json يحتوي على --skipLibCheck لتجاوز أخطاء tsc
 RUN npm run build
 
 # Stage 2: Build Frontend
@@ -19,7 +17,7 @@ WORKDIR /app/frontend
 COPY src/frontend/package*.json ./
 RUN npm install
 
-# تمرير رابط الـ API كمتغير بناء للفرونت إند
+
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
