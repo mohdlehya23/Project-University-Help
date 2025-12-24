@@ -1,5 +1,7 @@
 Problem-Solving Log - Gaza University Portal Project
 
+Before every thing I had some problems when i tried to install Docker Desktop Application , the application was crashed when make unpackaging and install the application then i tried to search a bout this problem and i found the error in docker logs file so the problem was iam not enabled the virtual maschine platform feature so i enabled it then restart my computer then here we go with this problems too :(
+
 1. MongoDB Atlas Connection Issue (DNS)
 
 Problem: Connection to the Atlas database fails due to IPv6 conflicts in recent Node.js versions.
